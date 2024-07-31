@@ -34,9 +34,9 @@ autocmd InsertEnter * highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=234 g
 autocmd InsertLeave * highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=233 guifg=NONE guibg=#121212
 autocmd! User GoyoEnter Limelight "integrate plugins for focused writing mode
 autocmd! User GoyoLeave Limelight!
-" Define custom command 'gy' to enter Goyo
+" Define custom command 'Zen' to enter Goyo
 command! Zen Goyo
-" Define custom command 'gy!' to exit Goyo
+" Define custom command 'Zen!' to exit Goyo
 " command! Zen! Goyo!
 " Throws error 182, will fix later
 
