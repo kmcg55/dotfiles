@@ -7,6 +7,7 @@ fi
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH="$HOME/Library/Python/3.7/bin:$PATH"
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -77,6 +78,10 @@ export POWERLEVEL9K_MODE='nerdfont-complete'
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
+# Shortcut to quit application from command line
+qapp() {
+    osascript -e "quit app \"$1\""
+}
 
 # Remap history search to up and down arrows
 bindkey '^[[1;5A' history-substring-search-up
