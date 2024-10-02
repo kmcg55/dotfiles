@@ -122,7 +122,9 @@ nnoremap <C-f> :NERDTreeFind<CR>
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | call feedkeys(":quit\<CR>:\<BS>") | endif
 " Remap <ESC> to an easier keystroke (even easier than caps lock)
 inoremap jk <ESC>
-let mapleader = "'" " remap the map leader to ''', right next to 'l'
+" let mapleader = "'" " remap the map leader to ''', right next to 'l'
+" Turning this off since it's annoying and I
+" don't use the leader key (yet)
 
 " Call the .vimrc.plug file
 if filereadable(expand("~/.vimrc.plug"))
