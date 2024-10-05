@@ -8,6 +8,7 @@ fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export PATH="$HOME/Library/Python/3.7/bin:$PATH"
+export PATH=$PATH/usr/local/Cellar/openvpn/2.6.12/sbin/openvpn
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -102,7 +103,6 @@ plugins=(git
        	web-search
        	copyfile
        	you-should-use
-       	zsh-bat # Fancier alt to cat cmd
 	zsh-syntax-highlighting # Leave as last-sourced plugin
 	)
 
