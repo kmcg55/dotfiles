@@ -136,7 +136,20 @@ source <(fzf --zsh)
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
-alias home='cd /Users/kellymcgucken'
+alias home='cd ~'
+alias root='cd /'
+alias dtop='cd ~/Desktop'
+alias projects='cd ~/Documents/dev/projects'
+alias o=open
+alias q='exit'
+alias c='clear'
+# Enable ls deluxe for better directory formatting
+alias ls='lsd'
+alias cs='clear; ls'
+alias lsa='ls -a'
+alias lsl='ls -l'
+alias t='time'
+alias k='kill'
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
