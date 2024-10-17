@@ -143,8 +143,6 @@ alias projects='cd ~/Documents/dev/projects'
 alias o=open
 alias q='exit'
 alias c='clear'
-# Enable ls deluxe for better directory formatting
-alias ls='lsd'
 alias cs='clear; ls'
 alias lsa='ls -a'
 alias lsl='ls -l'
