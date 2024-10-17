@@ -136,7 +136,7 @@ source <(fzf --zsh)
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
-alias home='cd ~'#
+alias home='cd /Users/kellymcgucken'
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
