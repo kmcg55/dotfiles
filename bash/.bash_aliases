@@ -19,6 +19,6 @@ alias k='kill'
 # Let grep be colorful
 alias grep='grep --color=auto'
 # Will fix later, having permissions issues
-#alias bashrc='$EDITOR ~/dotfiles/bash/.bashrc'
-#alias vimrc='$EDITOR ~/dotfiles/vim/.vimrc'
-#alias zshrc='$EDITOR ~/dotfiles/zsh/.zshrc'
+alias bashrc='$EDITOR ~/.bashrc'
+alias vimrc='$EDITOR ~/.vimrc'
+alias zshrc='$EDITOR ~/.zshrc'
