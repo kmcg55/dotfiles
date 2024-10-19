@@ -135,19 +135,9 @@ source <(fzf --zsh)
 # the $ZSH_CUSTOM folder, with .zsh extension. Examples:
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
+# Source aliases
+[ -f ~/.zsh_aliases ] && source ~/.zsh_aliases
 # For a full list of active aliases, run `alias`.
-alias home='cd ~'
-alias root='cd /'
-alias dtop='cd ~/Desktop'
-alias projects='cd ~/Documents/dev/projects'
-alias o=open
-alias q='exit'
-alias c='clear'
-alias cs='clear; ls'
-alias lsa='ls -a'
-alias lsl='ls -l'
-alias t='time'
-alias k='kill'
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
