@@ -5,12 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-export PATH="$HOME/Library/Python/3.7/bin:$PATH"
-export PATH=$PATH/usr/local/Cellar/openvpn/2.6.12/sbin/openvpn
-export PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig:$PKG_CONFIG_PATH
-
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -80,37 +74,98 @@ export POWERLEVEL9K_MODE='nerdfont-complete'
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
-# Shortcut to quit application from command line
-qapp() {
-    osascript -e "quit app \"$1\""
-}
-
-# Remap history search to up and down arrows
-bindkey '^[[1;5A' history-substring-search-up
-bindkey '^[[1;5B' history-substring-search-down
-
-# Config highlight color for history substring search
-export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=white,bg=#48a32f,bold'
-
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git
-       	zsh-autosuggestions
-       	zsh-history-substring-search
-       	web-search
-       	copyfile
-       	you-should-use
-	zsh-syntax-highlighting # Leave as last-sourced plugin
-	)
+# Plugins to load immediately
+plugins=(git zsh-autosuggestions you-should-use zsh-syntax-highlighting)
 
+# Function to lazy load plugins
+lazy_load_plugin() {
+  local plugin="$1"
+  if [[ ! "$PLUGIN_LIST" =~ "$plugin" ]]; then
+    source "$ZSH/plugins/$plugin/$plugin.plugin.zsh"
+    PLUGIN_LIST="$PLUGIN_LIST $plugin"
+  fi
+}
 
+# Lazy load web-search
+web-search() {
+  lazy_load_plugin "web-search"
+  $0 "$@"
+}
+
+# Lazy load history-substring-search
+history-substring-search-setup() {
+  lazy_load_plugin "history-substring-search"
+  
+  # Remap history search to up and down arrows
+  bindkey '^[[A' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down
+  
+  # Config highlight color for history substring search
+  export HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=white,bg=#48a32f,bold'
+  
+  # Remove this function after first call
+  unset -f history-substring-search-setup
+}
+
+history-substring-search-up() {
+  history-substring-search-setup
+  zle history-substring-search-up
+}
+
+history-substring-search-down() {
+  history-substring-search-setup
+  zle history-substring-search-down
+}
+
+zle -N history-substring-search-up
+zle -N history-substring-search-down
+
+# Lazy load copyfile
+copyfile() {
+  lazy_load_plugin "copyfile"
+  $0 "$@"
+}
+
+# Load Oh My Zsh
 source $ZSH/oh-my-zsh.sh
+
+# Package manager env variables
+export PATH="$HOME/Library/Python/3.7/bin:$PATH"
+export PATH=$PATH/usr/local/Cellar/openvpn/2.6.12/sbin/openvpn
+export PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig:$PKG_CONFIG_PATH
+
+# Lazy load nvm
+export NVM_DIR="$HOME/.nvm"
+nvm() {
+  unset -f nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  nvm "$@"
+}
+
+# Lazy load cargo
+cargo() {
+  unset -f cargo
+  . "$HOME/.cargo/env"
+  cargo "$@"
+}
+
+# After loading Oh My Zsh, set up key bindings for history-substring-search
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
 # Set up fzf key bindings and fuzzy completion
-source <(fzf --zsh)
+# source <(fzf --zsh)
+
+# Shortcut to quit application from command line
+qapp() {
+    osascript -e "quit app \"$1\""
+}
 
 # User configuration
 
@@ -145,9 +200,3 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-# Include Rust's cargo in PATH
-. "$HOME/.cargo/env"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
