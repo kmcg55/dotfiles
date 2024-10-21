@@ -16,4 +16,4 @@ alias bashrc='vim ~/.bashrc'
 alias vimrc='vim ~/.vimrc'
 alias zshrc='vim ~/.zshrc'
 # Add path for hifi-rs
-alias hifi-rs="/Users/kellymcgucken/Documents/dev/projects/hifi.rs/target/x86_64-apple-darwin/release/hifi-rs"
+alias hifi-rs="~/Documents/dev/projects/hifi.rs/target/x86_64-apple-darwin/release/hifi-rs"
