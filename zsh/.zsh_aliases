@@ -3,6 +3,7 @@ alias home='cd ~'
 alias root='cd /'
 alias dtop='cd ~/Desktop'
 alias projects='cd ~/Documents/dev/projects'
+alias notes='cd ~/Documents/Notes'
 alias o=open
 alias q='exit'
 alias c='clear'
@@ -14,3 +15,5 @@ alias k='kill'
 alias bashrc='vim ~/.bashrc'
 alias vimrc='vim ~/.vimrc'
 alias zshrc='vim ~/.zshrc'
+# Add path for hifi-rs
+alias hifi-rs="/Users/kellymcgucken/Documents/dev/projects/hifi.rs/target/x86_64-apple-darwin/release/hifi-rs"
