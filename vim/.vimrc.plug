@@ -6,6 +6,7 @@ Plug 'preservim/nerdtree' "File browser inside vim
 Plug 'ryanoasis/vim-devicons' "Cool icons for nerd tree
 Plug '907th/vim-auto-save' "auto-saves files as you edit
 Plug 'plasticboy/vim-markdown' "Markdown syntax highlighting
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' } "Markdown preview in browser
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim' "Fuzzy file finding plugin
 Plug 'vim-airline/vim-airline'
