@@ -17,6 +17,11 @@ set backspace=indent,eol,start
 " -----------------------------------------------------------------------------
 " Plugin Management
 " -----------------------------------------------------------------------------
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin('~/.vim/plugged')
 " Git Integration
 Plug 'tpope/vim-fugitive'                " Git wrapper
@@ -39,17 +44,18 @@ Plug 'junegunn/limelight.vim'            " Focus mode
 " Appearance
 Plug 'joshdick/onedark.vim'              " OneDark theme
 Plug 'vim-airline/vim-airline'           " Status bar
-Plug 'vim-airline/vim-airline-themes'     " Status bar themes
+Plug 'vim-airline/vim-airline-themes'    " Status bar themes
 call plug#end()
 
 " -----------------------------------------------------------------------------
 " Visual Settings
 " -----------------------------------------------------------------------------
 " Color and Syntax
+filetype plugin indent on
 syntax on
 set wildmenu
+let g:onedark_terminal_italics = 1 
 colorscheme onedark
-let g:onedark_terminal_italics = 1
 
 " Line Numbers
 set number
@@ -76,6 +82,21 @@ if (empty($TMUX))
   endif
 endif
 
+" Put these in an autocmd group, so that you can revert them with:
+" ":augroup vimStartup | au! | augroup END"
+augroup vimStartup
+  au!
+
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid, when inside an event handler
+  " (happens when dropping a file on gvim) and for a commit message (it's
+  " likely a different one than last time).
+     autocmd BufReadPost *
+        \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+        \ |   exe "normal! g`\""
+	\ | endif
+augroup END
+
 " -----------------------------------------------------------------------------
 " Search Settings
 " -----------------------------------------------------------------------------
@@ -92,18 +113,16 @@ let g:airline_powerline_fonts = 1
 set guifont=JetBrains\ Mono\ NL:h12
 
 " Markdown
-" -----------------------------------------------------------------------------
-" Plugin Configurations
-" -----------------------------------------------------------------------------
-" Markdown
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_frontmatter = 1
 " Concealment settings
-set conceallevel=2
+let g:pencil#conceallevel = 2
+set concealcursor=""  " Show concealed text when on the line
+set conceallevel=2    " Enable concealing
 let g:vim_markdown_conceal = 2
 let g:vim_markdown_conceal_code_blocks = 0
 let g:vim_markdown_math = 1
-let g:vim_markdown_conceal_links = 1
+let g:vim_markdown_conceal_urls = 1
 " Ensure links are concealed
 let g:markdown_syntax_conceal = 1
 " Style settings
@@ -122,6 +141,7 @@ command! Zen Goyo
 
 " Vim-Pencil Configuration
 let g:pencil_higher_contrast_ui = 1
+let g:pencil#wrapModeDefault = 'soft'   " default is 'hard'
 augroup pencil
   autocmd!
   autocmd FileType markdown,md,text call pencil#init()
@@ -151,9 +171,16 @@ nnoremap <C-f> :NERDTreeFind<CR>
 " Easier escape
 inoremap jk <ESC>
 
-" Terminal italics support
-let &t_ZH="\e[3m" " Not sure if needed yet
-let &t_ZR="\e[23m"
+" copy to end of line
+nnoremap Y y$
+" copy to system clipboard
+vnoremap gy "+y
+" copy whole file to system clipboard
+nnoremap gY gg"+yG
+
+" Enable TAB indent and SHIFT-TAB unindent
+vnoremap <silent> <TAB> >gv
+vnoremap <silent> <S-TAB> <gv 
 
 " -----------------------------------------------------------------------------
 " Auto Commands
