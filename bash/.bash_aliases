@@ -18,7 +18,6 @@ alias t='time'
 alias k='kill'
 # Let grep be colorful
 alias grep='grep --color=auto'
-# Will fix later, having permissions issues
 alias bashrc='$EDITOR ~/.bashrc'
 alias vimrc='$EDITOR ~/.vimrc'
 alias zshrc='$EDITOR ~/.zshrc'
