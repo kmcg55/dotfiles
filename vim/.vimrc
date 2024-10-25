@@ -1,134 +1,162 @@
 " Kelly McGucken's vimrc
 " Forked from a template <https://missing.csail.mit.edu/2020/files/vimrc> 
-"  provided  by MIT's Missing Semester Course <https://missing.csail.mit.edu/>
+" provided by MIT's Missing Semester Course <https://missing.csail.mit.edu/>
 
-" Comments in Vimscript start with a `"`.
-
-" If you open this file in Vim, it'll be syntax highlighted for you.  " Vim is based on Vi. Setting `nocompatible` switches from the default
-" Vi-compatibility mode and enables useful Vim functionality. This
-" configuration option turns out not to be necessary for the file named
-" '~/.vimrc', because Vim automatically enters nocompatible mode if that file
-" is present. But we're including it here just in case this config file is
-" loaded some other way (e.g. saved as `foo`, and then Vim started with
-" `vim -u foo`).
+" -----------------------------------------------------------------------------
+" Basic Settings
+" -----------------------------------------------------------------------------
 set nocompatible
-
-"Enable 256 colors
-set t_Co=256
-
-" Set colorscheme
-colorscheme 256_noir
-
-" Set airline theme
-let g:airline_theme='wombat'
-let g:airline_powerline_fonts = 1
-
-"Setup fonts for vim airline
 set encoding=utf-8
-set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h12
-
-" Change highlighting of cursor line when entering/leaving Insert Mode
-set cursorline
-highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=233 guifg=NONE guibg=#121212
-autocmd InsertEnter * highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=234 guifg=NONE guibg=#1c1c1c
-autocmd InsertLeave * highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=233 guifg=NONE guibg=#121212
-autocmd! User GoyoEnter Limelight "integrate plugins for focused writing mode
-autocmd! User GoyoLeave Limelight!
-" Define custom command 'Zen' to enter Goyo
-command! Zen Goyo
-" Define custom command 'Zen!' to exit Goyo
-" command! Zen! Goyo!
-" Throws error 182, will fix later
-
-
-" Turn on syntax highlighting.
-syntax on
-
-" If using a dark background within the editing area and syntax highlighting
-" turn on this option as well
-set background=dark
-
-" Disable the default Vim startup message.
+set t_Co=256
 set shortmess+=I
-
-" Show line numbers.
-set number
-
-" This enables relative line numbering mode. With both number and
-" relativenumber enabled, the current line shows the true line number, while
-" all other lines (above and below) are numbered relative to the current line.
-" This is useful because you can tell, at a glance, what count is needed to
-" jump up or down to a particular line, by {count}k to go up or {count}j to go
-" down.
-set relativenumber
-
-" Always show the status line at the bottom, even if you only have one window open.
-set laststatus=2
-
-" The backspace key has slightly unintuitive behavior by default. For example,
-" by default, you can't backspace before the insertion point set with 'i'.
-" This configuration makes backspace behave more reasonably, in that you can
-" backspace over anything.
+set noerrorbells visualbell t_vb=
+set mouse+=a
+set hidden
 set backspace=indent,eol,start
 
-" By default, Vim doesn't let you hide a buffer (i.e. have a buffer that isn't
-" shown in any window) that has unsaved changes. This is to prevent you from "
-" forgetting about unsaved changes and then quitting e.g. via `:qa!`. We find
-" hidden buffers helpful enough to disable this protection. See `:help hidden`
-" for more information on this.
-set hidden
+" -----------------------------------------------------------------------------
+" Plugin Management
+" -----------------------------------------------------------------------------
+call plug#begin('~/.vim/plugged')
+" Git Integration
+Plug 'tpope/vim-fugitive'                " Git wrapper
 
-" This setting makes search case-insensitive when all characters in the string
-" being searched are lowercase. However, the search becomes case-sensitive if
-" it contains any capital letters. This makes searching more convenient.
+" File Navigation
+Plug 'mbbill/undotree'                   " Visualization of undo tree
+Plug 'preservim/nerdtree'                " File system explorer
+Plug 'ryanoasis/vim-devicons'            " Icons for NERDTree
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'                  " Fuzzy finder
+
+" Markdown and Writing Support
+Plug 'godlygeek/tabular'                 " Text alignment
+Plug 'plasticboy/vim-markdown'           " Enhanced markdown support
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
+Plug 'preservim/vim-pencil'              " Better writing experience
+Plug 'junegunn/goyo.vim'                 " Distraction-free writing
+Plug 'junegunn/limelight.vim'            " Focus mode
+
+" Appearance
+Plug 'joshdick/onedark.vim'              " OneDark theme
+Plug 'vim-airline/vim-airline'           " Status bar
+Plug 'vim-airline/vim-airline-themes'     " Status bar themes
+call plug#end()
+
+" -----------------------------------------------------------------------------
+" Visual Settings
+" -----------------------------------------------------------------------------
+" Color and Syntax
+syntax on
+set wildmenu
+colorscheme onedark
+let g:onedark_terminal_italics = 1
+
+" Line Numbers
+set number
+set relativenumber
+
+" Status Line
+set laststatus=2
+
+" Cursor Line
+set cursorline
+highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=40 guifg=NONE guibg=#121212
+autocmd InsertEnter * highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=234 guifg=NONE guibg=#1c1c1c
+autocmd InsertLeave * highlight CursorLine cterm=NONE ctermfg=NONE ctermbg=233 guifg=NONE guibg=#121212
+
+" True Color Support
+if (empty($TMUX))
+  if (has("nvim"))
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  if (has("termguicolors"))
+    set termguicolors
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " Italics support 
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  endif
+endif
+
+" -----------------------------------------------------------------------------
+" Search Settings
+" -----------------------------------------------------------------------------
 set ignorecase
 set smartcase
-
-" Enable searching as you type, rather than waiting till you press enter.
 set incsearch
 
-" Unbind some useless/annoying default key bindings.
-nmap Q <Nop> " 'Q' in normal mode enters Ex mode. You almost never want this.
-" Disable audible bell because it's annoying.
-set noerrorbells visualbell t_vb=
+" -----------------------------------------------------------------------------
+" Plugin Configurations
+" -----------------------------------------------------------------------------
+" Airline
+let g:airline_theme='onedark'
+let g:airline_powerline_fonts = 1
+set guifont=JetBrains\ Mono\ NL:h12
 
-" Enable mouse support. You should avoid relying on this too much, but it can
-" sometimes be convenient.
-set mouse+=a
+" Markdown
+" -----------------------------------------------------------------------------
+" Plugin Configurations
+" -----------------------------------------------------------------------------
+" Markdown
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_frontmatter = 1
+" Concealment settings
+set conceallevel=2
+let g:vim_markdown_conceal = 2
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_math = 1
+let g:vim_markdown_conceal_links = 1
+" Ensure links are concealed
+let g:markdown_syntax_conceal = 1
+" Style settings
+let g:vim_markdown_emphasis_multiline = 1
+let g:vim_markdown_strikethrough = 1
+let g:vim_markdown_new_list_item_indent = 2
+let g:vim_markdown_folding_style_pythonic = 1
+let g:vim_markdown_override_foldtext = 0
+" Enable conceal in markdown files specifically
+autocmd FileType markdown setlocal conceallevel=2
 
-" Try to prevent bad habits like using the arrow keys for movement. This is
-" not the only possible bad habit. For example, holding down the h/j/k/l keys
-" for movement, rather than using more efficient movement commands, is also a
-" bad habit. The former is enforceable through a .vimrc, while we don't know
-" how to prevent the latter.
-" Do this in normal mode...
+" Goyo and Limelight Integration
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
+command! Zen Goyo
+
+" Vim-Pencil Configuration
+let g:pencil_higher_contrast_ui = 1
+augroup pencil
+  autocmd!
+  autocmd FileType markdown,md,text call pencil#init()
+  autocmd FileType markdown,md,text setlocal spell spelllang=en_us
+augroup end
+
+" -----------------------------------------------------------------------------
+" Key Mappings
+" -----------------------------------------------------------------------------
+" Disable arrow keys to build good habits
 nnoremap <Left>  :echoe "Use h"<CR>
 nnoremap <Right> :echoe "Use l"<CR>
 nnoremap <Up>    :echoe "Use k"<CR>
 nnoremap <Down>  :echoe "Use j"<CR>
-" ...and in insert mode
 inoremap <Left>  <ESC>:echoe "Use h"<CR>
 inoremap <Right> <ESC>:echoe "Use l"<CR>
 inoremap <Up>    <ESC>:echoe "Use k"<CR>
 inoremap <Down>  <ESC>:echoe "Use j"<CR>
-" Remap undo tree command to Ctrl-Z
+
+" Plugin shortcuts
 nnoremap <C-z> :UndotreeToggle<CR>
-" Remap hotkeys for NERDtree plugin
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
-" Close the tab if NERDTree is the only window remaining in it.
-autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | call feedkeys(":quit\<CR>:\<BS>") | endif
-" Remap <ESC> to an easier keystroke (even easier than caps lock)
+
+" Easier escape
 inoremap jk <ESC>
-" let mapleader = "'" " remap the map leader to ''', right next to 'l'
-" Turning this off since it's annoying and I
-" don't use the leader key (yet)
 
-" Call the .vimrc.plug file
-if filereadable(expand("~/.vimrc.plug"))
-    source ~/.vimrc.plug
-endif
+" Terminal italics support
+let &t_ZH="\e[3m" " Not sure if needed yet
+let &t_ZR="\e[23m"
 
-
+" -----------------------------------------------------------------------------
+" Auto Commands
+" -----------------------------------------------------------------------------
+" NERDTree auto-close
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
