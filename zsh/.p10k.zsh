@@ -367,6 +367,9 @@
   # Change the value of this parameter to show a different icon.
   typeset -g POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
 
+  # Octocat symbol 
+  typeset -g POWERLEVEL9K_VCS_GIT_ICON=$'\uf113'
+
   # Formatter for Git status.
   #
   # Example output: master wip ⇣42⇡42 *42 merge ~42 +42 !42 ?42.
