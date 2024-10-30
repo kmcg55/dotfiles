@@ -1,8 +1,11 @@
 # Aliases
 alias home='cd ~'
 alias root='cd /'
-alias dtop='cd ~/Desktop'
-alias projects='cd ~/Documents/dev/projects'
+alias dtop='cd $HOME/Desktop'
+alias projects='cd $HOME/Documents/dev/projects'
+alias docs='cd $HOME/Documents'
+alias notes='cd $HOME/Documents/Notes'
+alias todo='$EDITOR $HOME/todo.txt'
 alias o=open
 alias ..='cd ..'
 alias ...='cd ..; cd ..'
@@ -18,6 +21,6 @@ alias t='time'
 alias k='kill'
 # Let grep be colorful
 alias grep='grep --color=auto'
-alias bashrc='$EDITOR ~/.bashrc'
-alias vimrc='$EDITOR ~/.vimrc'
-alias zshrc='$EDITOR ~/.zshrc'
+alias bashrc='$EDITOR $HOME/.bashrc'
+alias vimrc='$EDITOR $HOME/.vimrc'
+alias zshrc='$EDITOR $HOME/.zshrc'
