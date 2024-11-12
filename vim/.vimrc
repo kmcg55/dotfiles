@@ -9,7 +9,9 @@ set nocompatible
 set encoding=utf-8
 set t_Co=256
 set shortmess+=I
-set noerrorbells visualbell t_vb=
+set noerrorbells
+set visualbell
+set t_vb=
 set mouse+=a
 set hidden
 set backspace=indent,eol,start
@@ -30,8 +32,8 @@ Plug 'tpope/vim-fugitive'                " Git wrapper
 Plug 'mbbill/undotree'                   " Visualization of undo tree
 Plug 'preservim/nerdtree'                " File system explorer
 Plug 'ryanoasis/vim-devicons'            " Icons for NERDTree
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'                  " Fuzzy finder
+"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+"Plug 'junegunn/fzf.vim'                  " Fuzzy finder
 
 " Markdown and Writing Support
 Plug 'godlygeek/tabular'                 " Text alignment
@@ -52,8 +54,9 @@ call plug#end()
 " -----------------------------------------------------------------------------
 " Color and Syntax
 filetype plugin indent on
-syntax on
-set wildmenu
+if has("syntax")
+  syntax on
+endif 
 let g:onedark_terminal_italics = 1 
 colorscheme onedark
 
@@ -82,20 +85,15 @@ if (empty($TMUX))
   endif
 endif
 
-" Put these in an autocmd group, so that you can revert them with:
-" ":augroup vimStartup | au! | augroup END"
-augroup vimStartup
-  au!
-
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid, when inside an event handler
-  " (happens when dropping a file on gvim) and for a commit message (it's
-  " likely a different one than last time).
-     autocmd BufReadPost *
-        \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-        \ |   exe "normal! g`\""
-	\ | endif
-augroup END
+" When editing a file, always jump to the last known cursor position.
+" Don't do it when the position is invalid, when inside an event handler
+" (happens when dropping a file on gvim) and for a commit message (it's
+" likely a different one than last time).
+autocmd BufReadPost *
+  \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit' |
+  \   exe "normal! g`\"" |
+  \ endif
+  
 
 " -----------------------------------------------------------------------------
 " Search Settings
@@ -103,6 +101,8 @@ augroup END
 set ignorecase
 set smartcase
 set incsearch
+set wildmenu
+set path=**
 
 " -----------------------------------------------------------------------------
 " Plugin Configurations
@@ -134,6 +134,30 @@ let g:vim_markdown_override_foldtext = 0
 " Enable conceal in markdown files specifically
 autocmd FileType markdown setlocal conceallevel=2
 
+" Debug filetype detection
+autocmd BufNewFile,BufRead *.md set filetype=markdown
+autocmd BufNewFile,BufRead *.markdown set filetype=markdown
+
+" Headers with onedark colors
+" Only works with git sourced markdown files
+function! s:CustomMarkdownColors()
+	highlight! htmlH1 guifg=#c678dd gui=bold
+        highlight! htmlH2 guifg=#c678dd gui=bold
+        highlight! htmlH3 guifg=#c678dd gui=bold
+        highlight! htmlH4 guifg=#c678dd gui=bold
+        highlight! htmlH5 guifg=#c678dd gui=bold
+        highlight! htmlH6 guifg=#c678dd gui=bold
+endfunction
+
+augroup CustomMarkdownColors
+    autocmd!
+    " Try multiple events to catch all cases
+    autocmd BufEnter *.md call s:CustomMarkdownColors()
+    autocmd BufRead *.md call s:CustomMarkdownColors()
+    autocmd FileType markdown call s:CustomMarkdownColors()
+    autocmd ColorScheme * call s:CustomMarkdownColors()
+augroup END
+
 " Goyo and Limelight Integration
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
@@ -164,19 +188,13 @@ inoremap <Down>  <ESC>:echoe "Use j"<CR>
 " Plugin shortcuts
 nnoremap <C-z> :UndotreeToggle<CR>
 nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-p> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind<CR>
+"TODO: Find a better remap for this (leader key?)
+nnoremap <C-F> :NERDTreeFind<CR>
 
 " Easier escape
 inoremap jk <ESC>
-
-" copy to end of line
-nnoremap Y y$
-" copy to system clipboard
-vnoremap gy "+y
-" copy whole file to system clipboard
-nnoremap gY gg"+yG
 
 " Enable TAB indent and SHIFT-TAB unindent
 vnoremap <silent> <TAB> >gv
