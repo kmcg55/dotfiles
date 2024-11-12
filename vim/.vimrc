@@ -16,6 +16,21 @@ set mouse+=a
 set hidden
 set backspace=indent,eol,start
 
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = ","
+
+" Fast saving
+nmap <leader>w :w!<cr>
+
+" Tweaks for browsing with Vim's built-in navigator
+let g:netrw_banner=0        " disable annoying banner
+let g:netrw_browse_split=4  " open in prior window
+let g:netrw_altv=1          " open splits to the right
+let g:netrw_liststyle=3     " tree view
+let g:netrw_list_hide=netrw_gitignore#Hide()
+let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+
 " -----------------------------------------------------------------------------
 " Plugin Management
 " -----------------------------------------------------------------------------
@@ -191,7 +206,7 @@ nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-p> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 "TODO: Find a better remap for this (leader key?)
-nnoremap <C-F> :NERDTreeFind<CR>
+nnoremap <leader>m :NERDTreeFind<CR>
 
 " Easier escape
 inoremap jk <ESC>
