@@ -135,7 +135,7 @@ let g:pencil#conceallevel = 2
 set concealcursor=""  " Show concealed text when on the line
 set conceallevel=2    " Enable concealing
 let g:vim_markdown_conceal = 2
-let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_conceal_code_blocks = 1
 let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_urls = 1
 " Ensure links are concealed
@@ -149,28 +149,45 @@ let g:vim_markdown_override_foldtext = 0
 " Enable conceal in markdown files specifically
 autocmd FileType markdown setlocal conceallevel=2
 
-" Debug filetype detection
-autocmd BufNewFile,BufRead *.md set filetype=markdown
-autocmd BufNewFile,BufRead *.markdown set filetype=markdown
-
-" Headers with onedark colors
-" Only works with git sourced markdown files
+" Set custom markdown header colors
 function! s:CustomMarkdownColors()
-	highlight! htmlH1 guifg=#c678dd gui=bold
-        highlight! htmlH2 guifg=#c678dd gui=bold
-        highlight! htmlH3 guifg=#c678dd gui=bold
-        highlight! htmlH4 guifg=#c678dd gui=bold
-        highlight! htmlH5 guifg=#c678dd gui=bold
-        highlight! htmlH6 guifg=#c678dd gui=bold
+    " First override onedark's markdown bold groups
+    highlight! markdownBold guifg=#e5c07b gui=bold cterm=bold
+    highlight! htmlBold guifg=#e5c07b gui=bold cterm=bold
+
+    " Then set header specific groups with explicit markdown prefix
+    highlight! markdownH1 guifg=#56c298 gui=bold cterm=bold
+    highlight! markdownH2 guifg=#56c298 gui=bold cterm=bold
+    highlight! markdownH3 guifg=#56c298 gui=bold cterm=bold
+    highlight! markdownH4 guifg=#56c298 gui=bold cterm=bold
+    highlight! markdownH5 guifg=#56c298 gui=bold cterm=bold
+    highlight! markdownH6 guifg=#56c298 gui=bold cterm=bold
+
+    " And HTML prefix
+    highlight! htmlH1 guifg=#56c298 gui=bold cterm=bold
+    highlight! htmlH2 guifg=#56c298 gui=bold cterm=bold
+    highlight! htmlH3 guifg=#56c298 gui=bold cterm=bold
+    highlight! htmlH4 guifg=#56c298 gui=bold cterm=bold
+    highlight! htmlH5 guifg=#56c298 gui=bold cterm=bold
+    highlight! htmlH6 guifg=#56c298 gui=bold cterm=bold
+
+    " Force any bold within headers to use header color
+    highlight! markdownH1Bold guifg=#56c298 gui=bold cterm=bold
+    highlight! markdownH2Bold guifg=#56c298 gui=bold cterm=bold
+    highlight! markdownH3Bold guifg=#56c298 gui=bold cterm=bold
+    highlight! markdownH4Bold guifg=#56c298 gui=bold cterm=bold
+    highlight! markdownH5Bold guifg=#56c298 gui=bold cterm=bold
+    highlight! markdownH6Bold guifg=#56c298 gui=bold cterm=bold
+
+    " Force heading delimiters to match header color
+    highlight! mkdHeading guifg=#56c298 gui=bold cterm=bold
+
 endfunction
 
 augroup CustomMarkdownColors
     autocmd!
-    " Try multiple events to catch all cases
-    autocmd BufEnter *.md call s:CustomMarkdownColors()
-    autocmd BufRead *.md call s:CustomMarkdownColors()
-    autocmd FileType markdown call s:CustomMarkdownColors()
     autocmd ColorScheme * call s:CustomMarkdownColors()
+    autocmd FileType markdown call s:CustomMarkdownColors()
 augroup END
 
 " Goyo and Limelight Integration
@@ -202,11 +219,11 @@ inoremap <Down>  <ESC>:echoe "Use j"<CR>
 
 " Plugin shortcuts
 nnoremap <C-z> :UndotreeToggle<CR>
-nnoremap <leader>n :NERDTreeFocus<CR>
+"nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-p> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
-"TODO: Find a better remap for this (leader key?)
-nnoremap <leader>m :NERDTreeFind<CR>
+nnoremap <leader>n :NERDTreeFind<CR>
+nnoremap <leader>m :MarkdownPreview<CR>
 
 " Easier escape
 inoremap jk <ESC>
