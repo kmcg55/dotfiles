@@ -193,7 +193,7 @@ augroup END
 " Goyo and Limelight Integration
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
-command! Zen Goyo
+"command! Zen Goyo
 
 " Vim-Pencil Configuration
 let g:pencil_higher_contrast_ui = 1
@@ -223,6 +223,7 @@ nnoremap <C-z> :UndotreeToggle<CR>
 nnoremap <C-p> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <leader>n :NERDTreeFind<CR>
+nnoremap <leader>z :Goyo<CR> 
 nnoremap <leader>m :MarkdownPreview<CR>
 
 " Easier escape

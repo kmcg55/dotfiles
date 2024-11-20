@@ -22,6 +22,9 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # IMPORTANT, DO NOT DELETE!
 export POWERLEVEL9K_MODE='nerdfont-complete'
 
+# Set manpage viewer to vim 
+export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man nomod nolist' -\""
+
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in $ZSH/themes/
